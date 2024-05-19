@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/test.css' %}?v=1.5" type="text/css">
+{% endblock %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <h1>{{ quiz.title }}</h1>
+    <div class="quiz-images">
+        {% for picture in pictures %}
+        <img src="{{ picture.picture.url }}" alt="Product Image {{ forloop.counter }}" class="product-image uniform-size">
+        {% endfor %}
+    </div>
+    <p class="question label">あなたはどんなポーズで寝ますか？この問題はあなたの性格を診断します。直感で１つ選んでください😊</p>
+    <div class="choices label">
+        <ol>
+            <li>うつぶせ</li>
+            <li>お腹に丸まって</li>
+            <li>横向き</li>
+            <li>あおむけ</li>
+        </ol>
+    </div>
+    <div class="results label">
+        <p>▼診断結果▼</p> 
+        <ol>
+            <li>もし隣に誰かいるのなら、一人で独占したいタイプ</li>
+            <li>誰かに守られたいあなたは寂しがり屋なタイプ</li>
+            <li>あなたは人に安心感を与えられる器用なタイプ</li>
+            <li>あなたはオープンで柔軟なタイプ</li>
+        </ol><br>
+        <p>結果はいかがでしたか？</p>
+        <p>この内容を共有したい時は送信先を入力してね😘</p>
+    </div>
+    <form action="{% url 'psychology_tests:send_share_email' %}" method="post" class="share-form">
+        {% csrf_token %}
+        <div class="email-container custom-email-form label">
+            <label for="email">メールアドレス:</label>
+            <input type="email" id="email" name="email" required style="width: 50%;">
+            <input type="hidden" name="quiz_id" value="{{ quiz.id }}"> <!-- quiz_idを追加 -->
+            <button type="submit" class="button" onclick="return confirm('送信しますか?');">送信</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

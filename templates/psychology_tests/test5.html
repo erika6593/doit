@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/test.css' %}?v=1.5" type="text/css">
+{% endblock %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <h1>{{ quiz.title }}</h1>
+    <div class="quiz-images">
+        {% for picture in pictures %}
+        <img src="{{ picture.picture.url }}" alt="Product Image {{ forloop.counter }}" class="product-image uniform-size">
+        {% endfor %}
+    </div>
+    <p class="question label">久しぶりに、気合いを入れて家の掃除をしようとしているあなた。さて、次のうちどこから手をつけますか？直感で１つ選んでください😊</p>
+    <div class="choices label">
+        <ol>
+            <li>玄関</li>
+            <li>寝室</li>
+            <li>リビング</li>
+            <li>水回り</li>
+        </ol>
+    </div>
+    <div class="results label">
+        <p>▼診断結果▼</p> 
+        <ol>
+            <li>いくら恋人だとしても、「誰とどこに行くの？」なんて束縛や嫉妬が激しい相手はNG！それぞれの時間を好きに過ごせるような、自由な恋愛がベストだと思っています。</li>
+            <li>一緒にいて心が癒されるような、安心できる人を恋人にしたいと思っているでしょう。刺激的な恋愛よりも、落ち着いた恋愛を好むタイプです。</li>
+            <li>深層心理では、リビングは心そのものです。『心に余裕があってこその恋愛』と考えるタイプなので、仕事・人間関係がうまくいっているときに恋愛を楽しみたいと思っています。</li>
+            <li>清廉潔白な関係が理想なので、嘘をついたりごまかしたりするような相手は敬遠したくなるでしょう。心だけでなく、見た目の美しさも恋愛において重要だと思っているタイプです。</li>
+        </ol><br>
+        <p>結果はいかがでしたか？</p>
+        <p>この内容を共有したい時は送信先を入力してね😘</p>
+    </div>
+    <form action="{% url 'psychology_tests:send_share_email' %}" method="post" class="share-form">
+        {% csrf_token %}
+        <div class="email-container custom-email-form label">
+            <label for="email">メールアドレス:</label>
+            <input type="email" id="email" name="email" required style="width: 50%;">
+            <input type="hidden" name="quiz_id" value="{{ quiz.id }}"> <!-- quiz_idを追加 -->
+            <button type="submit" class="button" onclick="return confirm('送信しますか?');">送信</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

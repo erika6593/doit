@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/test.css' %}?v=1.5" type="text/css">
+{% endblock %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <h1>{{ quiz.title }}</h1>
+    <div class="quiz-images">
+        {% for picture in pictures %}
+        <img src="{{ picture.picture.url }}" alt="Product Image {{ forloop.counter }}" class="product-image uniform-size">
+        {% endfor %}
+    </div>
+    <p class="question label">目の前に一瞬で地球を爆発できる危険なスイッチがあります。どんなデザインですか？直感で１つ選んでください😊</p>
+    <div class="choices label">
+        <ol>
+            <li>赤色の丸形の押しボタン</li>
+            <li>青色の四角形の押しボタン</li>
+            <li>縦に３つ並んでいるカラフルなスイッチ</li>
+            <li>四角い真っ黒なスイッチ</li>
+        </ol>
+    </div>
+    <div class="results label">
+        <p>▼診断結果▼</p> 
+        <ol><br>
+            <li>サイコパス傾向はほとんどありません。通常の健全な思考回路を持っている証拠です。</li>
+            <li>サイコパスレベルがかなり高いです。あなたは良心が欠如してる可能性が高いです。</li>
+            <li>サイコパスの気質があるかもしれません。ときどき周囲の人たちが引いてしまうような言動や行動を取ってしまうことがあるようです。</li>
+            <li>少しサイコパス的な特徴があるようですが、安心してください。基本的には一般的な人と同じような感性を持っています。</li>
+        </ol><br>
+        <p>結果はいかがでしたか？</p>
+        <p>この内容を共有したい時は送信先を入力してね😘</p>
+    </div>
+    <form action="{% url 'psychology_tests:send_share_email' %}" method="post" class="share-form">
+        {% csrf_token %}
+        <div class="email-container custom-email-form label">
+            <label for="email">メールアドレス:</label>
+            <input type="email" id="email" name="email" required style="width: 50%;">
+            <input type="hidden" name="quiz_id" value="{{ quiz.id }}"> <!-- quiz_idを追加 -->
+            <button type="submit" class="button" onclick="return confirm('送信しますか?');">送信</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

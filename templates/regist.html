@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %}
+
+{% block title %}新規ユーザー登録{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form method="POST" action="{% url 'accounts:regist' %}"> 
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endfor %}
+    <input type="submit" value="新規ユーザー登録" class="input-submit">
+</form>
+</div>
+{% endblock %}

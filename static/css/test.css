@@ -1,0 +1,80 @@
+/* product pictureの設定 */
+.quiz-images img {
+    max-width: 100%; /* 画像の最大幅を親要素の幅に合わせる */
+    height: auto; /* 画像の高さを自動調整 */
+    opacity: 0.5; /* 画像の不透明度を設定 */
+    transition: opacity 0.3s; /* 不透明度の変化にアニメーションを追加 */
+}
+
+img.uniform-size {
+    width: 1600px;
+    height: 300px;
+    object-fit: cover; /* 画像サイズ固定 */
+}
+
+/* テスト　メール送信ボタン*/
+button {
+    background-color: #e16ba0;
+    color: white;
+    border: none;
+    cursor: pointer;
+    height: 40px; /* ボタンの高さ統一 */
+    border-radius: 10px; /* 角を丸くする */
+}
+
+button:hover {
+    background-color: #e39aa1; /* 暗い赤色に変化 */
+}
+
+/* メールフォームのレイアウト */
+.email-container {
+    display: flex;
+    align-items: center; /* 中央揃えで要素の高さを揃える */
+    justify-content: space-between; /* 要素間に均等なスペースを保持 */
+    gap: 10px; /* 要素間の隙間 */
+    padding: 10px; /* コンテナのパディング */
+}
+
+.email-container label, 
+.email-container input[type="email"], 
+.email-container button {
+    display: flex;
+    align-items: center; /* 内部要素を垂直中央揃え */
+    height: 40px; /* 高さ統一 */
+    padding: 0 10px; /* パディング調整 */
+}
+
+input[type="email"] {
+    flex-grow: 1; /* 入力フィールドを伸ばして利用可能なスペースを最大限に使用 */
+    border: 1px solid #ccc; /* 入力欄のボーダースタイル */
+    line-height: 1.5; /* 入力テキストの行間 */
+}
+
+/* ユーザーエージェントスタイルのオーバーライド */
+button, input[type="email"] {
+    appearance: none; /* デフォルトスタイルの削除 */
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* 全体のフォントファミリーと背景色設定の修正 */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #ffc0cb; /* 背景色をピンクに設定 */
+    color: #333;
+    margin: 40px;
+}
+
+/* サイコパスの枠 */
+.choices li, .results li {
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #fff;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* タイトル以外のテキスト色調整 */
+.label {
+    color: gray; /* テキスト色をグレーに変更 */
+}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/test.css' %}?v=1.5" type="text/css">
+{% endblock %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <h1>{{ quiz.title }}</h1>
+    <div class="quiz-images">
+        {% for picture in pictures %}
+        <img src="{{ picture.picture.url }}" alt="Product Image {{ forloop.counter }}" class="product-image uniform-size">
+        {% endfor %}
+    </div>
+    <p class="question label">祖母の家で探し物をしていたあなたは、棚の中から古い箱を見つけました。箱を開けてみたあなたは、中に何を見つけたのでしょうか。直感で１つ選んでください😊</p>
+    <div class="choices label">
+        <ol>
+            <li>色々な雨</li>
+            <li>家族の写真</li>
+            <li>どこかの土</li>
+            <li>昔の土</li>
+        </ol>
+    </div>
+    <div class="results label">
+        <p>▼診断結果▼</p> 
+        <ol>
+            <li>色々な飴を選んだあなたは、甘い誘惑に騙されてしまうでしょう。甘い言葉をかけられたり、自分好みの異性に優しくされたりするとたちまち騙されてしまいます。</li>
+            <li>家族の写真を選んだあなたは、権威や家柄に騙されてしまうでしょう。由緒正しい家柄の人や、その道の専門家に弱い人です。相手がどんな性格でも尊敬し、言うことに納得をしてしまいます。</li>
+            <li>どこかの土を選んだあなたは、騙されにくい性格です。あなたは現実的で物事を客観視できます。自分を律することができ、簡単に人を信用することも少ないでしょう。</li>
+            <li>昔の小銭を選んだあなたは、儲け話に騙されてしまうでしょう。お金が好きで、物質的な豊かさを求める人です。まわりの人から簡単にできる儲け話を持ち掛けられ、騙されてしまう可能性があります。</li>
+        </ol><br>
+        <p>結果はいかがでしたか？</p>
+        <p>この内容を共有したい時は送信先を入力してね😘</p>
+    </div>
+    <form action="{% url 'psychology_tests:send_share_email' %}" method="post" class="share-form">
+        {% csrf_token %}
+        <div class="email-container custom-email-form label">
+            <label for="email">メールアドレス:</label>
+            <input type="email" id="email" name="email" required style="width: 50%;">
+            <input type="hidden" name="quiz_id" value="{{ quiz.id }}"> <!-- quiz_idを追加 -->
+            <button type="submit" class="button" onclick="return confirm('送信しますか?');">送信</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}?v=1.5" type="text/css">
+{% endblock %}
+
+{% block title %}マイページ{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>心理テスト履歴</h2>
+    
+    {% if test_results %}
+        <p class="common-text-color">全ての履歴が表示されます。</p>
+        <p class="common-text-color">詳細を見るにはタイトルをクリックしてください😉</p>
+    
+        <form action="{% url 'psychology_tests:delete_all_results' %}" method="post" style="text-align: center;">
+            {% csrf_token %}
+            <button type="submit" class="delete-all-button" onclick="return confirm('全ての履歴を削除しますか？');">
+                全ての履歴を削除する
+            </button>
+        </form>
+
+        <ul class="list-unstyled">
+            {% for result in test_results %}
+            <li class="mb-2">
+                <div class="content-wrapper ">
+                    <div class="title common-text-color">
+                        <a href="{% url 'psychology_tests:quiz_detail' pk=result.quiz.id %}" class="text-decoration-none common-text-color">
+                            ・{{ result.quiz.title }}
+                        </a>
+                        
+                    </div>
+                    <div class="details">
+                        <span class="date common-text-color">{{ result.date_taken }}</span>
+                        <form action="{% url 'psychology_tests:delete_result' result_id=result.id %}" method="post" class="delete-form">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-button" onclick="return confirm('削除しますか?');">削除</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="text-muted text-center common-text-color">まだ履歴がありません😫</div>
+        <div class="text-muted text-center common-text-color">心理テストを開始してください🤓</div>
+    {% endif %}
+</div>
+{% endblock %}

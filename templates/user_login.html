@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %}
+
+{% block title %}ログイン{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form method="POST" action="{% url 'accounts:user_login' %}">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="error">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        <input type="submit" value="ログイン" class="input-submit">
+    </form>
+</div>
+{% endblock %}

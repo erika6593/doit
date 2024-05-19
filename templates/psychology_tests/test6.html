@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/test.css' %}?v=1.5" type="text/css">
+{% endblock %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <h1>{{ quiz.title }}</h1>
+    <div class="quiz-images">
+        {% for picture in pictures %}
+        <img src="{{ picture.picture.url }}" alt="Product Image {{ forloop.counter }}" class="product-image uniform-size">
+        {% endfor %}
+    </div>
+    <p class="question label">森の中で迷ってしまったあなた。歩き続けていくと『お菓子の家』が見えてきました。しかし、鍵がかかっていて中へ入れません。次のうちどこを壊して中に入りますか？直感で１つ選んでください😊</p>
+    <div class="choices label">
+        <ol>
+            <li>窓</li>
+            <li>玄関</li>
+            <li>勝手口</li>
+            <li>天窓</li>
+        </ol>
+    </div>
+    <div class="results label">
+        <p>▼診断結果▼</p> 
+        <ol>
+            <li>人間関係におけるバランス力が抜群なタイプです。気配り上手で、相手のリアクションを見ながら臨機応変に対応を変えていくことができます。さまざまな人が集まるコミュニティの中でも、抜群のバランス力でうまく立ち回ることができるタイプです。</li>
+            <li>人間関係のバランス力がやや低いタイプ。相手が誰であっても思ったことをストレートに口に出すので、人と衝突することも多いかもしれません。その反面、そんなあなたの熱い気持ちをわかってくれる人と出会うことができれば、最強のリーダーになれる可能性も秘めています。</li>
+            <li>人間関係のバランス力が高いタイプです。人を傷つけないやさしさがあるので、気の合う少数の友人とうまく人間関係を築くことができます。自分から積極的に人と関わるようにすると、人生がさらに豊かになるかもしれません。</li>
+            <li>人間関係におけるバランス力が皆無です。そもそも人と深く関わることを望んでいないので、『一匹狼タイプ』といえます。カリスマ性は高いですが、「本当に心を許せる人がいない…」と心の中では孤独を抱えているかもしれません。</li>
+        </ol><br>
+        <p>結果はいかがでしたか？</p>
+        <p>この内容を共有したい時は送信先を入力してね😘</p>
+    </div>
+    <form action="{% url 'psychology_tests:send_share_email' %}" method="post" class="share-form">
+        {% csrf_token %}
+        <div class="email-container custom-email-form label">
+            <label for="email">メールアドレス:</label>
+            <input type="email" id="email" name="email" required style="width: 50%;">
+            <input type="hidden" name="quiz_id" value="{{ quiz.id }}"> <!-- quiz_idを追加 -->
+            <button type="submit" class="button" onclick="return confirm('送信しますか?');">送信</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

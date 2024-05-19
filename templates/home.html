@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %}
+
+<title>{% block title %}アプリについて{% endblock %}</title>
+
+{% block content %}
+<div class="content-text">
+<h4>心理テストを楽しめます👯</h4><br>
+<h6>まずはユーザー登録してね！</h6>
+<h6>登録後はマイページにあなたの履歴が自動保存されます🌞</h6>
+<h6>気になる題名をクリック、４つの選択肢を選ぶだけ♪</h6>
+<h6>診断結果は指定のメールアドレスに送信可能👌</h6>
+<h6>話題作りに活用してね🤗</h6>
+    
+{% endblock %}👯

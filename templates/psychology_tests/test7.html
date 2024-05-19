@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/test.css' %}?v=1.5" type="text/css">
+{% endblock %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <h1>{{ quiz.title }}</h1>
+    <div class="quiz-images">
+        {% for picture in pictures %}
+        <img src="{{ picture.picture.url }}" alt="Product Image {{ forloop.counter }}" class="product-image uniform-size">
+        {% endfor %}
+    </div>
+    <p class="question label">あなたが一番好きだと思う空をひとつ選んでください。直感で１つ選んでください😊</p>
+    <div class="choices label">
+        <ol>
+            <li>朝焼け空</li>
+            <li>夕焼け空</li>
+            <li>冬の夜空</li>
+            <li>夏の晴天</li>
+        </ol>
+    </div>
+    <div class="results label">
+        <p>▼診断結果▼</p> 
+        <ol>
+            <li>「自分を見失わない」恋愛ができるタイプでしょう。精神的にも安定していて、大人の恋愛をすることができるのでどんなときでも自分を見失うことがありません。</li>
+            <li>恋愛をすると「自分を見失いやすい」タイプといえます。恋愛体質な一面があり、恋をすると相手に夢中になりやすいでしょう。</li>
+            <li>恋愛をしても「自分を見失わない」タイプでしょう。ロマンチックな一面を持つあなたは、心の中で燃え上がるような恋愛をしたいと思っているのではないでしょうか。</li>
+            <li>恋をすると「自分を見失いやすい」タイプ。情熱的な恋愛をするあなたは好きな人ができるとモードが切り替わり、まわりも見えなくなって突っ走る傾向があります。</li>
+        </ol><br>
+        <p>結果はいかがでしたか？</p>
+        <p>この内容を共有したい時は送信先を入力してね😘</p>
+    </div>
+    <form action="{% url 'psychology_tests:send_share_email' %}" method="post" class="share-form">
+        {% csrf_token %}
+        <div class="email-container custom-email-form label">
+            <label for="email">メールアドレス:</label>
+            <input type="email" id="email" name="email" required style="width: 50%;">
+            <input type="hidden" name="quiz_id" value="{{ quiz.id }}"> <!-- quiz_idを追加 -->
+            <button type="submit" class="button" onclick="return confirm('送信しますか?');">送信</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

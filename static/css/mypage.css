@@ -1,0 +1,85 @@
+/* 見出しと説明文の中央揃え */
+h2, p {
+    text-align: center;
+}
+
+/* リストのスタイリング：余白なし、リストスタイルなし */
+ul.list-unstyled {
+    padding: 0;
+    list-style-type: none;
+}
+
+/* リストアイテムのスタイリング：背景色、余白、マージン、カラム方向 */
+li.mb-2 {
+    background-color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 題名のスタイリング */
+.title a {
+    color: #333;
+    text-decoration: none; /* 下線を非表示 */
+    font-size: 1rem; /* フォントサイズ設定 */
+}
+
+/* 日付と削除ボタンを含む詳細部分のスタイリング */
+.details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 日付のスタイリング：フォントサイズ小さく、余白 */
+.date {
+    font-size: 0.8rem; /* 日付のフォントサイズを小さく */
+}
+
+/* 削除ボタンのスタイリング */
+.delete-button {
+    border: none;
+    background-color: #ff6666;
+    color: white;
+    padding: 3px 10px; /* 小さめのパディングでボタンをコンパクトに */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem; /* フォントサイズを日付と一致させる */
+    white-space: nowrap; /* 改行なし */
+}
+
+/* 削除ボタンのホバー効果：色を少し暗く */
+.delete-button:hover {
+    background-color: #e39aa1;
+}
+
+/* 削除フォームのスタイリング：サイズ縮小防止 */
+.delete-form {
+    flex-shrink: 0; /* フォームが内容に応じて縮小しないように設定 */
+}
+
+.delete-all-button {
+    margin-top: 10px;
+    padding: 5px 15px;
+    background-color: #e04252; /* Bootstrapの危険色 */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.8rem; /* フォントサイズを小さくする */
+    white-space: nowrap;
+}
+
+.delete-all-button:hover {
+    background-color: #e39aa1; /* 暗い赤色に変化 */
+}
+
+.text-muted {
+    color: gray; /* Bootstrapのデフォルトの色 */
+    text-align: center; /* 中央揃え */
+    margin-top: 20px; /* 上部に余白を追加 */
+}
+.common-text-color, .common-text-color a {
+    color: gray !important; /* 他のスタイルによる上書きを防ぐ */
+}

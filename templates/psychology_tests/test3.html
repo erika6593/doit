@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/test.css' %}?v=1.5" type="text/css">
+{% endblock %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <h1>{{ quiz.title }}</h1>
+    <div class="quiz-images">
+        {% for picture in pictures %}
+        <img src="{{ picture.picture.url }}" alt="Product Image {{ forloop.counter }}" class="product-image uniform-size">
+        {% endfor %}
+    </div>
+    <p class="question label">人によって見え方が違うイラストがあります。どんなイラストが書いてあるか直感で１つ選んでください😊</p>
+    <div class="choices label">
+        <ol>
+            <li>おじさんの顔</li>
+            <li>ウサギの顔</li>
+            <li>電車やバス</li>
+            <li>がま口のポーチ</li>
+        </ol>
+    </div>
+    <div class="results label">
+        <p>▼診断結果▼</p> 
+        <ol>
+            <li>あなたは友達から、同じ目線で何でも気軽に話せると慕われているタイプ。一緒にいると「居心地が良い」と思われているようです。</li>
+            <li>あなたは、ちょっぴり天然で何を言い出すか判らないところがあるみたい。一緒に居て楽しい、面白い、ワクワクする…と思われていそうです。</li>
+            <li>あなたは友達から、とても知的で頼りになると思われているようです。本当に悩みを抱えてしまった時や、難しい問題に直面した時など、あなたにまず意見を聞きたいと思う人が多いのではないでしょうか？</li>
+            <li>あなたは友達から、客観的にこの世界のことを良く観察し、熟知も理解もしている賢者だと思われていそうです。</li>
+        </ol><br>
+        <p>結果はいかがでしたか？</p>
+        <p>この内容を共有したい時は送信先を入力してね😘</p>
+    </div>
+    <form action="{% url 'psychology_tests:send_share_email' %}" method="post" class="share-form">
+        {% csrf_token %}
+        <div class="email-container custom-email-form label">
+            <label for="email">メールアドレス:</label>
+            <input type="email" id="email" name="email" required style="width: 50%;">
+            <input type="hidden" name="quiz_id" value="{{ quiz.id }}"> <!-- quiz_idを追加 -->
+            <button type="submit" class="button" onclick="return confirm('送信しますか?');">送信</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

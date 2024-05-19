@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/list.css' %}?v=1.5" type="text/css">
+{% endblock %}
+
+{% block title %}心理テスト一覧{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>心理テスト一覧</h2><br>
+    <form method="get" action="{% url 'psychology_tests:quiz_list' %}" class="search-form search-form-short">
+        <div class="input-group mb-3 custom-input-group">
+            <input type="text" class="form-control smaller-input" name="product_type_name" placeholder="カテゴリーを入力" value="{{ product_type_name }}" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <button class="btn btn-primary smaller-button" type="submit" id="button-addon2">検索する</button>
+        </div>
+    </form>
+    <table class="table table-striped table-bordered text-center">
+        <thead>
+            <tr>
+                <th>カテゴリー</th>
+                <th>テスト</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz in object_list %}
+            <tr>
+                <td class="category-social-life">{{ quiz.product_type.name }}</td>
+                <td><a href="{% url 'psychology_tests:quiz_detail' quiz.pk %}">{{ quiz.title }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

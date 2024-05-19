@@ -1,0 +1,75 @@
+/* フォームコンテナのスタイリング */
+.form-container {
+    text-align: center;
+    width: 80%;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+/* フォームグループ: ラベルとフィールドを縦に並べる */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* ラベルのスタイリング */
+.form-group label {
+    margin-bottom: 5px;
+    color: gray;
+}
+
+/* テキストボックス、パスワードボックス、その他入力フィールドのスタイリング */
+input[type="email"], input[type="password"], input[type="text"],
+.form-group select, .form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    color: gray;
+}
+
+/* プレースホルダーのスタイリング */
+input[type="email"]::placeholder, input[type="password"]::placeholder, input[type="text"]::placeholder {
+    color: lightgray;
+}
+
+/* サブミットボタンのスタイリング */
+.input-submit {
+    background-color: #e16ba0;
+    color: white;
+    border-radius: 10px;
+    width: 50%;
+    padding: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.input-submit:hover {
+    background-color: #e39aa1;
+}
+
+/* エラーメッセージのスタイリング */
+.error {
+    color: red;
+    margin-bottom: 5px;
+    font-size: 1em;
+}
+
+/* ナビゲーションスタイル (例示) */
+.navbar-brand-custom {
+    color: #f03b3b !important;
+}
+
+.navbar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}

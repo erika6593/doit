@@ -1,0 +1,19 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div>
+    <h1>ログの統計</h1>
+    <h2>カテゴリーの統計</h2>
+    <ul>
+        {% for item in category_usage %}
+        <li>{{ item.quiz__product_type__name }}: {{ item.total }} 回</li>
+        {% endfor %}
+    </ul>
+    <h2>実施時間の統計</h2>
+    <ul>
+        {% for item in hour_usage %}
+        <li>{{ item.hour }}:00 - {{ item.total }} 回</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

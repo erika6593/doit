@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/test.css' %}?v=1.5" type="text/css">
+{% endblock %}
+
+{% block title %}{{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <h1>{{ quiz.title }}</h1>
+    <div class="quiz-images">
+        {% for picture in pictures %}
+        <img src="{{ picture.picture.url }}" alt="Product Image {{ forloop.counter }}" class="product-image uniform-size">
+        {% endfor %}
+    </div>
+    <p class="question label">空に向かって４種類の乗り物があります。あなたはどれに乗りますか？直感で１つ選んでください😊</p>
+    <div class="choices label">
+        <ol>
+            <li>赤色の気球</li>
+            <li>飛行機</li>
+            <li>ロケット</li>
+            <li>空を飛べる羽丸形の押しボタン</li>
+        </ol>
+    </div>
+    <div class="results label">
+        <p>▼診断結果▼</p> 
+        <ol>
+            <li>あなたは平和を好む人。そして相手の性格をじっくり観察できるタイプだから、人間関係におけるトラブルはほとんどないでしょう。</li>
+            <li>あなたは物事を合理的に考える人。人に左右さることや直感で「何か」を選択をすることはありませんので、周りからの信頼は厚いでしょう。</li>
+            <li>あなたは秘密主義なタイプ。他人との距離感を大切にする人なので、誤解されてしまうことも多いですが、そのミステリアスな感じに惹かれる人は多いでしょう。</li>
+            <li>あなたはユーモアセンスが溢れるタイプ。あなたの考え、あなたの言葉を大切に、そのままのあなたでいてください。</li>
+        </ol><br>
+        <p>結果はいかがでしたか？</p>
+        <p>この内容を共有したい時は送信先を入力してね😘</p>
+    </div>
+    <form action="{% url 'psychology_tests:send_share_email' %}" method="post" class="share-form">
+        {% csrf_token %}
+        <div class="email-container custom-email-form label">
+            <label for="email">メールアドレス:</label>
+            <input type="email" id="email" name="email" required style="width: 50%;">
+            <input type="hidden" name="quiz_id" value="{{ quiz.id }}"> <!-- quiz_idを追加 -->
+            <button type="submit" class="button" onclick="return confirm('送信しますか?');">送信</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
