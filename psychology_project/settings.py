@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
 ]
 
 AUTH_USER_MODEL = 'accounts.Users'
@@ -51,8 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "auth.account.middleware.AccountMiddleware",  
-    "allauth.account.middleware.AccountMiddleware",  
+    # "auth.account.middleware.AccountMiddleware",
+    # "allauth.account.middleware.AccountMiddleware",
 ]
 
 
@@ -170,8 +170,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'e0429ri@gmail.com' 
-EMAIL_HOST_PASSWORD = 'ocjgolsdiuyeitpu' 
+EMAIL_HOST_USER = 'e0429ri@gmail.com'
+EMAIL_HOST_PASSWORD = 'ocjgolsdiuyeitpu'
 
 
 BASE_URL = os.getenv('BASE_URL', 'http://127.0.0.1:8000')
