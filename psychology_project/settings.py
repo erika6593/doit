@@ -5,9 +5,7 @@ from django.utils import timezone
 
 logger = logging.getLogger('usage')
 
-# これにより.envファイルが読み込まれます
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates', )
@@ -51,8 +49,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "auth.account.middleware.AccountMiddleware",  
-    "allauth.account.middleware.AccountMiddleware",  
+    # "auth.account.middleware.AccountMiddleware",  
+    # "allauth.account.middleware.AccountMiddleware",  
 ]
 
 
@@ -170,14 +168,31 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'e0429ri@gmail.com' 
-EMAIL_HOST_PASSWORD = 'ocjgolsdiuyeitpu' 
+EMAIL_HOST_USER = 'info.psycho2024@gmail.com' 
+EMAIL_HOST_PASSWORD = 'yhiumkikyvsabhhx'
+
+# EMAIL_HOST_USER = 'e0429ri@gmail.com' 
+# EMAIL_HOST_PASSWORD = 'ocjgolsdiuyeitpu' 
 
 
-BASE_URL = os.getenv('BASE_URL', 'http://127.0.0.1:8000')
+# BASE_URL = os.getenv('BASE_URL', 'http://127.0.0.1:8000')
 
-# settings/production.py
-BASE_URL = 'https://sentia.pythonanywhere.com'
+# # settings/production.py
+# BASE_URL = 'https://sentia.pythonanywhere.com'
 
-# settings/development.py
-BASE_URL = 'http://127.0.0.1:8000'
+# # settings/development.py
+# BASE_URL = 'http://127.0.0.1:8000'
+
+# 遷移先指定
+# DEBUG = bool(os.environ.get('DEBUG', False))
+
+if DEBUG:
+    BASE_URL = 'http://127.0.0.1:8000'
+else:
+    BASE_URL = 'https://sentia.pythonanywhere.com'
+
+# メール内のリンク1
+LINK_URL_1 = f'{BASE_URL}/psychology_tests/quizzes/quiz_list/'
+
+# もう一つのリンクの設定
+LINK_URL_2 = f'{BASE_URL}/accounts/user/'
