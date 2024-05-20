@@ -51,8 +51,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "auth.account.middleware.AccountMiddleware",  
     "allauth.account.middleware.AccountMiddleware",  
 ]
+
 
 ROOT_URLCONF = 'psychology_project.urls'
 
