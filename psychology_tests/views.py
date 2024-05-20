@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST,  require_http_methods
 from django.contrib.auth.mixins import LoginRequiredMixin
 from . models import Quiz, TestResult, ProductPictures
 from django.core.mail import send_mail
-from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -16,6 +15,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from .forms import EmailForm  
+from django.conf import settings
 
 
 logger = logging.getLogger('usage')
@@ -134,24 +134,31 @@ class QuizListView(LoginRequiredMixin, ListView):
 #             <a href="{request.build_absolute_uri(quiz_list_url)}">心理テスト一覧に戻る</a>
 #         """)
 
-# こっちがよしこ　でも誤送信でもおくる感じ
+# こっちがよしこ　簡易的に遅れる感じ
 @require_http_methods(["POST"]) 
 def send_share_email(request):
     if request.method == 'POST':
         recipient_email = request.POST.get('email')
         page_url = request.POST.get('page_url')
-        subject = '心理テストの結果が共有されました！'
-        # from_email = 'fro@example.com'
-        message = f"以下のリンクから心理テストのページを確認できます: {page_url}"
-        sender_email = 'your-email@gmail.com'  # 送信者のメールアドレス
-
+        subject = '心理テストが共有されました！'
+        sender_email = recipient_email# 送信者のメールアドレス
+        
+        full_page_url = f'{settings.BASE_URL}{page_url}'
+        
+        message = f"以下のリンクから心理テストを確認できます: {full_page_url}"
+        # message = f"以下のリンクから心理テストを確認できます: {page_url}"
+        # sender_email = 'your-email@gmail.com'  # 送信者のメールアドレス
+        
+        
         send_mail(subject, message, sender_email, [recipient_email])
 
         # リンクを含むメッセージを返す
-        return HttpResponse("""
-            メールが送信されました！<br><br>
-            <a href="http://127.0.0.1:8000/psychology_tests/quizzes/quiz_list/">心理テスト一覧に戻る</a>
-        """)
+        return HttpResponse(f"メールが送信されました！<br><br>"
+                            f"<a href='{settings.LINK_URL_1}'>心理テスト一覧に戻る</a>")
+        # return HttpResponse("""
+        #     メールが送信されました！<br><br>
+        #     <a href="http://127.0.0.1:8000/psychology_tests/quizzes/quiz_list/">心理テスト一覧に戻る</a>
+        # """)
     else:
         return HttpResponse("アドレスを間違えています。")
 
@@ -165,10 +172,12 @@ def my_page(request):
 def delete_result(request, result_id):
     result = get_object_or_404(TestResult, id=result_id, user=request.user)  # ユーザーが所有する履歴のみ削除可能
     result.delete()
-    return HttpResponse("""
-        削除しました！<br><br>
-        <a href="http://127.0.0.1:8000/accounts/user/">マイページに戻る</a>
-    """)  # 削除後にリダイレクトするページ
+    return HttpResponse(f"削除しました！<br><br>"
+                        f"<a href='{settings.LINK_URL_2}'>マイページに戻る</a>")  # 削除後にリダイレクトするページ
+    # return HttpResponse("""
+    #     削除しました！<br><br>
+    #     <a href="http://127.0.0.1:8000/accounts/user/">マイページに戻る</a>
+    # """)  # 削除後にリダイレクトするページ
 
 @login_required
 @require_POST
@@ -176,7 +185,9 @@ def delete_all_results(request):
     # ユーザーが所有する全履歴を削除
     TestResult.objects.filter(user=request.user).delete()
     # 削除後のメッセージを表示し、特定のページにリダイレクト
-    return HttpResponse("""
-        全ての履歴を削除しました！<br><br>
-        <a href="http://127.0.0.1:8000/accounts/user/">マイページに戻る</a>
-    """)
+    return HttpResponse(f"削除しました！<br><br>"
+                        f"<a href='{settings.LINK_URL_2}'>マイページに戻る</a>")  # 削除後にリダイレクトするページ
+    # return HttpResponse("""
+    #     全ての履歴を削除しました！<br><br>
+    #     <a href="http://127.0.0.1:8000/accounts/user/">マイページに戻る</a>
+    # """)
