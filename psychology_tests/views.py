@@ -139,28 +139,21 @@ class QuizListView(LoginRequiredMixin, ListView):
 def send_share_email(request):
     if request.method == 'POST':
         recipient_email = request.POST.get('email')
-        page_url = request.POST.get('page_url')
+        quiz_id = request.POST.get('quiz_id')  # ユーザーが指定したクイズIDを取得
         subject = '心理テストが共有されました！'
-        sender_email = recipient_email# 送信者のメールアドレス
+        sender_email = 'your-email@gmail.com'  # 送信者のメールアドレス
 
-        # full_page_url = f'{settings.BASE_URL}{page_url}'
-        page_url = reverse('psychology_tests:quiz_detail', kwargs={'pk': 4})
+        # 動的なURLを生成
+        page_url = reverse('psychology_tests:quiz_detail', kwargs={'pk': quiz_id})
         full_page_url = request.build_absolute_uri(page_url)
 
         message = f"以下のリンクから心理テストを確認できます。アカウント登録がまだの方は新規ユーザー登録をお願いします！: {full_page_url}"
-        # message = f"以下のリンクから心理テストを確認できます: {page_url}"
-        # sender_email = 'your-email@gmail.com'  # 送信者のメールアドレス
-
 
         send_mail(subject, message, sender_email, [recipient_email])
 
         # リンクを含むメッセージを返す
         return HttpResponse(f"メールが送信されました！<br><br>"
                             f"<a href='{settings.LINK_URL_1}'>心理テスト一覧に戻る</a>")
-        # return HttpResponse("""
-        #     メールが送信されました！<br><br>
-        #     <a href="http://127.0.0.1:8000/psychology_tests/quizzes/quiz_list/">心理テスト一覧に戻る</a>
-        # """)
     else:
         return HttpResponse("アドレスを間違えています。")
 
