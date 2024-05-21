@@ -4,7 +4,8 @@ from django.views.decorators.http import require_POST,  require_http_methods
 from django.contrib.auth.mixins import LoginRequiredMixin
 from . models import Quiz, TestResult, ProductPictures
 from django.core.mail import send_mail
-from django.http import HttpResponse
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 import logging
@@ -103,60 +104,54 @@ class QuizListView(LoginRequiredMixin, ListView):
     #     TestResult.objects.create(user=request.user, quiz=quiz)
     #     return super().get(request, *args, **kwargs)
     
+
+# こっちがよしこ？
 # @require_http_methods(["POST"])
 # def send_share_email(request):
-#     form = EmailForm(request.POST)
-#     if form.is_valid():
-#         recipient_email = form.cleaned_data['email']
-#         message_body = form.cleaned_data['message']
-#         quiz_id = request.POST.get('quiz_id')  # フォームからではなくリクエストから取得します
-#         page_url = request.build_absolute_uri(reverse('psychology_tests:quiz_detail', args=[quiz_id]))
-#         subject = '心理テストの結果が共有されました！'
-#         message = f"{message_body}\n\n以下のリンクから心理テストのページを確認できます: {page_url}"
-#         sender_email = 'your-email@gmail.com'
+#     if request.method == 'POST':
+#         recipient_email = request.POST.get('email')
+#         quiz_id = request.POST.get('quiz_id')  # ユーザー指定
+#         subject = '心理テストが共有されました！'
+#         sender_email = 'your-email@gmail.com'  
+#         page_url = reverse('psychology_tests:quiz_detail', kwargs={'pk': quiz_id})
+#         full_page_url = request.build_absolute_uri(page_url)
 
-#         try:
-#             send_mail(subject, message, sender_email, [recipient_email])
-#             quiz_list_url = reverse('psychology_tests:quiz_list')
-#             return HttpResponse(f"""
-#                 メールが送信されました！<br><br>
-#                 <a href="{request.build_absolute_uri(quiz_list_url)}">心理テスト一覧に戻る</a>
-#             """)
-#         except Exception as e:
-#             return HttpResponse(f"メール送信中にエラーが発生しました: {str(e)}")
+#         message = f"以下のリンクから心理テストを確認できます。アカウント登録がまだの方は新規ユーザー登録をお願いします！: {full_page_url}"
+
+#         send_mail(subject, message, sender_email, [recipient_email])
+
+#         # リンクを含むメッセージを返す
+#         return HttpResponse(f"メールが送信されました！<br><br>"
+#                             f"<a href='{settings.LINK_URL_1}'>心理テスト一覧に戻る</a>")
 #     else:
-#         # フォームが無効な場合、エラーメッセージを表示する
-#         error_messages = "<br>".join([f"{field.label}: {error}" for field in form for error in field.errors])
-#         quiz_list_url = reverse('psychology_tests:quiz_list')
-#         return HttpResponse(f"""
-#             入力されたアドレスに誤りがあります、正しく入力してください！<br>
-#             {error_messages}<br><br>
-#             <a href="{request.build_absolute_uri(quiz_list_url)}">心理テスト一覧に戻る</a>
-#         """)
+#         return HttpResponse("アドレスを間違えています。")
 
-# こっちがよしこ　簡易的に遅れる感じ
 @require_http_methods(["POST"])
 def send_share_email(request):
     if request.method == 'POST':
         recipient_email = request.POST.get('email')
-        quiz_id = request.POST.get('quiz_id')  # ユーザーが指定したクイズIDを取得
-        subject = '心理テストが共有されました！'
-        sender_email = 'your-email@gmail.com'  # 送信者のメールアドレス
+        quiz_id = request.POST.get('quiz_id')  # ユーザー指定
+        
+        try:
+            validate_email(recipient_email)
+        except ValidationError:
+            error_message = "入力されたアドレスが間違っています、送信先を確認してください😟！"
+            return HttpResponse(f"{error_message}<br><br>"
+                                f"<a href='{settings.LINK_URL_1}'>心理テスト一覧に戻る</a>")
 
-        # 動的なURLを生成
+        subject = '心理テストが共有されました☺'
         page_url = reverse('psychology_tests:quiz_detail', kwargs={'pk': quiz_id})
         full_page_url = request.build_absolute_uri(page_url)
 
-        message = f"以下のリンクから心理テストを確認できます。アカウント登録がまだの方は新規ユーザー登録をお願いします！: {full_page_url}"
+        message = f"以下のリンクから心理テストを確認できます。アカウント登録がまだの方は新規ユーザー登録をお願いします🤗: {full_page_url}"
 
-        send_mail(subject, message, sender_email, [recipient_email])
+        # 送信者のメールアドレスを指定しないSMTPしてるから！
+        send_mail(subject, message, None, [recipient_email])
 
-        # リンクを含むメッセージを返す
-        return HttpResponse(f"メールが送信されました！<br><br>"
+        # メール送信成功
+        success_message = "メールが送信されました😺！"
+        return HttpResponse(f"{success_message}<br><br>"
                             f"<a href='{settings.LINK_URL_1}'>心理テスト一覧に戻る</a>")
-    else:
-        return HttpResponse("アドレスを間違えています。")
-
 
 @login_required
 def my_page(request):
@@ -166,10 +161,10 @@ def my_page(request):
 @login_required
 @require_POST
 def delete_result(request, result_id):
-    result = get_object_or_404(TestResult, id=result_id, user=request.user)  # ユーザーが所有する履歴のみ削除可能
+    result = get_object_or_404(TestResult, id=result_id, user=request.user)  # ユーザーが所有する個別履歴のみ削除
     result.delete()
     return HttpResponse(f"削除しました！<br><br>"
-                        f"<a href='{settings.LINK_URL_2}'>マイページに戻る</a>")  # 削除後にリダイレクトするページ
+                        f"<a href='{settings.LINK_URL_2}'>マイページに戻る</a>")  # リダイレクトするページ
     # return HttpResponse("""
     #     削除しました！<br><br>
     #     <a href="http://127.0.0.1:8000/accounts/user/">マイページに戻る</a>
@@ -178,9 +173,9 @@ def delete_result(request, result_id):
 @login_required
 @require_POST
 def delete_all_results(request):
-    # ユーザーが所有する全履歴を削除
+    # ユーザーの全履歴を削除
     TestResult.objects.filter(user=request.user).delete()
-    # 削除後のメッセージを表示し、特定のページにリダイレクト
+    # 削除後のメッセージを表示、リダイレクト
     return HttpResponse(f"削除しました！<br><br>"
                         f"<a href='{settings.LINK_URL_2}'>マイページに戻る</a>")  # 削除後にリダイレクトするページ
     # return HttpResponse("""
