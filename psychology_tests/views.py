@@ -135,21 +135,23 @@ class QuizListView(LoginRequiredMixin, ListView):
 #         """)
 
 # こっちがよしこ　簡易的に遅れる感じ
-@require_http_methods(["POST"]) 
+@require_http_methods(["POST"])
 def send_share_email(request):
     if request.method == 'POST':
         recipient_email = request.POST.get('email')
         page_url = request.POST.get('page_url')
         subject = '心理テストが共有されました！'
         sender_email = recipient_email# 送信者のメールアドレス
-        
-        full_page_url = f'{settings.BASE_URL}{page_url}'
-        
-        message = f"以下のリンクから心理テストを確認できます: {full_page_url}"
+
+        # full_page_url = f'{settings.BASE_URL}{page_url}'
+        page_url = reverse('psychology_tests:quiz_detail', kwargs={'pk': 4})
+        full_page_url = request.build_absolute_uri(page_url)
+
+        message = f"以下のリンクから心理テストを確認できます。アカウント登録がまだの方は新規ユーザー登録をお願いします！: {full_page_url}"
         # message = f"以下のリンクから心理テストを確認できます: {page_url}"
         # sender_email = 'your-email@gmail.com'  # 送信者のメールアドレス
-        
-        
+
+
         send_mail(subject, message, sender_email, [recipient_email])
 
         # リンクを含むメッセージを返す
@@ -161,6 +163,7 @@ def send_share_email(request):
         # """)
     else:
         return HttpResponse("アドレスを間違えています。")
+
 
 @login_required
 def my_page(request):

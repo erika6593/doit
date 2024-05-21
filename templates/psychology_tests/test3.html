@@ -37,10 +37,12 @@
     </div>
     <form action="{% url 'psychology_tests:send_share_email' %}" method="post" class="share-form">
         {% csrf_token %}
+        <input type="hidden" name="email" value="{{ recipient_email }}">
+        <input type="hidden" name="page_url" value="{{ request.build_absolute_uri }}">
+        <input type="hidden" name="quiz_id" value="{{ quiz.id }}">
         <div class="email-container custom-email-form label">
             <label for="email">メールアドレス:</label>
             <input type="email" id="email" name="email" required style="width: 50%;">
-            <input type="hidden" name="quiz_id" value="{{ quiz.id }}"> <!-- quiz_idを追加 -->
             <button type="submit" class="button" onclick="return confirm('送信しますか?');">送信</button>
         </div>
     </form>

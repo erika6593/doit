@@ -20,7 +20,7 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 SECRET_KEY = 'django-insecure--b)k5wxa(5l-x#vvfmxcmlzs9i23&#nwrzx*+affy)zl_+f#)4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['sentia.pythonanywhere.com', '127.0.0.1']
 
@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
 ]
 
 AUTH_USER_MODEL = 'accounts.Users'
@@ -49,8 +49,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # "auth.account.middleware.AccountMiddleware",  
-    # "allauth.account.middleware.AccountMiddleware",  
 ]
 
 
@@ -168,11 +166,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'info.psycho2024@gmail.com' 
+EMAIL_HOST_USER = 'info.psycho2024@gmail.com'
 EMAIL_HOST_PASSWORD = 'yhiumkikyvsabhhx'
 
-# EMAIL_HOST_USER = 'e0429ri@gmail.com' 
-# EMAIL_HOST_PASSWORD = 'ocjgolsdiuyeitpu' 
+
+
+
+
+# EMAIL_HOST_USER = 'e0429ri@gmail.com'
+# EMAIL_HOST_PASSWORD = 'ocjgolsdiuyeitpu'
 
 
 # BASE_URL = os.getenv('BASE_URL', 'http://127.0.0.1:8000')
@@ -190,6 +192,10 @@ if DEBUG:
     BASE_URL = 'http://127.0.0.1:8000'
 else:
     BASE_URL = 'https://sentia.pythonanywhere.com'
+
+# BASE_URLが"http://"または"https://"で始まらない場合はそれを追加
+if not BASE_URL.startswith('http://') and not BASE_URL.startswith('https://'):
+    BASE_URL = 'http://' + BASE_URL  # or 'https://' depending on your needs
 
 # メール内のリンク1
 LINK_URL_1 = f'{BASE_URL}/psychology_tests/quizzes/quiz_list/'
